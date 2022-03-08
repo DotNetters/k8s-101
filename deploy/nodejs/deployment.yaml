@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nodejsapp
+  name: nodejsapps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejsapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nodejsapp
+    spec:
+      containers:
+      # - image: fjvela/ephemeral-containers-theweather:1.0
+      - image: fjvela/ephemeral-containers-nodejs:1.0
+        name: nodejsapp
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+status: {}

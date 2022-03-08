@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: theweather
+  name: theweather
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: theweather
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: theweather
+    spec:
+      containers:
+      - image: fjvela/ephemeral-containers-theweather:1.0
+        name: theweather
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      - image: curlimages/curl
+        name: othercontainer
+        command: ["/bin/sh", "-c", "while true; do curl -s http://localhost:80/weatherforecast | grep -q '\"temperatureC\":'; if [ $? -eq 0 ]; then echo 'OK'; else echo 'KO'; fi; sleep 1; done"]
+        resources: {}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 3
+status: {}
